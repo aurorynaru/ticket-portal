@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { fromNodeHeaders } from 'better-auth/node';
-import type { AppAuth } from '../auth/auth.js';
+import { publicRequestBase, type AppAuth } from '../auth/auth.js';
 import type { AppConfig } from '../config/env.js';
 
 /**
@@ -21,7 +21,7 @@ export function registerApiAuthRoutes(
     url: '/api/auth/*',
     config: { rateLimit: { max: deps.config.rateLimitAuthMax, timeWindow: '1 minute' } },
     handler: async (req, reply) => {
-      const base = `http://${req.headers.host ?? 'localhost'}`;
+      const base = publicRequestBase(deps.config, req.headers.host);
       const url = new URL(req.url, base);
       const headers = fromNodeHeaders(req.headers);
       const init: RequestInit = { method: req.method, headers };

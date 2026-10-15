@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import { publicRequestBase } from '../auth/auth.js';
 import { fromNodeHeaders, resolveSession } from '../auth/session.js';
 import { requireAuth, type GuardDeps } from '../auth/guard.js';
 import { verifyCsrf } from '../lib/csrf.js';
@@ -24,7 +25,7 @@ export function registerAuthPageRoutes(app: FastifyInstance, deps: GuardDeps): v
   // official handler, forwards the session cookie, and redirects on success.
   app.post('/login', async (req, reply) => {
     const { email, password } = req.body as { email?: string; password?: string };
-    const base = `http://${req.headers.host ?? 'localhost'}`;
+    const base = publicRequestBase(deps.config, req.headers.host);
     const url = new URL('/api/auth/sign-in/email', base);
     const headers = fromNodeHeaders(req.headers);
     headers.set('content-type', 'application/json');

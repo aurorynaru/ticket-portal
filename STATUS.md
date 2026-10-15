@@ -1,6 +1,6 @@
 # Implementation status — agent-owned working log
 
-**State:** P6 IN PROGRESS (local work done; Railway execution pending owner approval). P6.1 code hardening + P6.2 backup/restore + P6.3 100-user load harness + P6.4 profiling are complete and verified locally: the 60 s mixed 100-VU run is 100% green (11,473/11,473 checks, 0 `http_req_failed`), read p95 184.77 ms, write p95 71.39 ms, app RSS 258 MB — all inside target on an isolated 20,000-ticket DB. A real app bug surfaced by the load run (due-date parser rejected `datetime-local` values) is fixed with regression tests. P6.4/P6.5 docs written (`docs/19_STAGING_CHECKLIST.md`, `docs/20_DEPLOYMENT_READINESS.md`). 105/105 vitest pass. **Blocked on owner approval** for the Railway steps (image build, service+volume, redeploy persistence, backup schedule, on-Railway load at 1 vCPU/512 MB) — Docker is not installed on this machine, so the image build and all Railway actions are deferred. Do NOT mark P6 complete or start P7 without that approval.
+**State:** P6 IN PROGRESS (local work done; Railway execution pending owner approval). P6.1 code hardening + P6.2 backup/restore + P6.3 100-user load harness + P6.4 profiling are complete and verified locally: the 60 s mixed 100-VU run is 100% green (11,473/11,473 checks, 0 `http_req_failed`), read p95 184.77 ms, write p95 71.39 ms, app RSS 258 MB — all inside target on an isolated 20,000-ticket DB. A real app bug surfaced by the load run (due-date parser rejected `datetime-local` values) is fixed with regression tests. P6.4/P6.5 docs written (`docs/19_STAGING_CHECKLIST.md`, `docs/20_DEPLOYMENT_READINESS.md`). 117/117 vitest pass. The production `Invalid origin: http://…` login failure is fixed locally (Request URL base now uses the validated BETTER_AUTH_URL; tests re-enable the origin check that Better Auth skips under NODE_ENV=test) with a dedicated regression suite. **Blocked on owner approval** for the Railway steps (image build, service+volume, redeploy persistence, backup schedule, on-Railway load at 1 vCPU/512 MB) — Docker is not installed on this machine, so the image build and all Railway actions are deferred. Do NOT mark P6 complete or start P7 without that approval.
 
 ## Phase progress
 
@@ -15,7 +15,7 @@
 
 ## Active task
 
-**P6 (local complete, Railway pending approval):** Local P6.1–P6.4 done and verified (backup/restore, 100-user load harness, profiling, due-date bug fix, `docs/19` + `docs/20`). Remaining P6.1/P6.2/P6.5 Railway steps (image build, service+volume, redeploy persistence, backup schedule, on-Railway load) require explicit owner approval and a Docker-enabled host. **Next exact task:** obtain owner approval, then execute `docs/19_STAGING_CHECKLIST.md` on Railway.
+**P6 (local complete, Railway pending approval):** Local P6.1–P6.4 done and verified (backup/restore, 100-user load harness, profiling, due-date bug fix, `docs/19` + `docs/20`). The production login failure (`Invalid origin: http://…` on Railway) is fixed locally with regression tests (`tests/proxied-https.test.ts`, 8/8) and all suites green (vitest 117/117, Playwright 4/4, TesterArmy 29/29). Remaining P6.1/P6.2/P6.5 Railway steps (image build, service+volume, redeploy persistence, backup schedule, on-Railway load) require explicit owner approval and a Docker-enabled host. **Next exact task:** obtain owner approval, redeploy, verify live sign-in, then execute `docs/19_STAGING_CHECKLIST.md` on Railway.
 
 ## Evidence ledger
 
@@ -54,6 +54,7 @@
 | 2026-10-15 | P6.3 100-user load harness + clean run | scripts/seed-load.ts (101 users/10 teams/20,000 tickets/60,000 comments; manifest now emits `openTickets`/`ownOpen`), load/k6/mixed.js (100 VU; explicit `Cookie` header for k6 2.x jar reset; `redirects:{max:0}` on POSTs; writes only to open tickets), load/k6/burst.js, scripts/load-run-local.ps1, scripts/load-resources.ps1, load/seed-manifest.json | 60 s mixed run: **11,473/11,473 checks (100%)**, 0 `http_req_failed`, 8,704 iterations; read p95 **184.77 ms** (<500), write p95 **71.39 ms** (<1000), app RSS **258 MB** (<400); 0 5xx / 0 SQLite busy | Done (local; on-Railway run pending approval) |
 | 2026-10-15 | P6.4 profiling + due-date bug fix | src/modules/tickets/service.ts (`parseDueAt` now accepts `datetime-local` `YYYY-MM-DDTHH:mm` in addition to bare dates), tests/tickets.test.ts (+4 regression tests) | `npm test` **105/105** (14 files); `npm run typecheck` exit 0; `npm run build` exit 0; 60 s load re-run 100% green | Done (local) |
 | 2026-10-15 | P6.5 staging checklist + readiness docs | docs/19_STAGING_CHECKLIST.md (Railway service+volume, health, identity, redeploy persistence, backup schedule + recovery drill, on-Railway load, rollback/go-no-go), docs/20_DEPLOYMENT_READINESS.md (measured load evidence + caveats + gating) | Docs written; all figures cite the measured local run; Railway steps explicitly gated on owner approval | Done (docs); Railway execution pending approval |
+| 2026-10-15 | Railway login failure fix (Better Auth origin) | src/auth/auth.ts (`publicRequestBase` helper + `advanced.disableOriginCheck: false` so tests enforce production origin rules), src/routes/api-auth.ts + src/routes/auth-pages.ts (Request URL base = validated BETTER_AUTH_URL, not fabricated `http://<host>`), tests/proxied-https.test.ts (new: 8 tests simulating the Railway TLS-proxy topology) | Reproduced production error pre-fix (`Invalid origin: http://ticket-portal-production.up.railway.app` on `Origin: null` + `Sec-Fetch-Site: same-origin`); post-fix: proxied-https 8/8, vitest 117/117 (16 files), Playwright 4/4, TesterArmy deterministic 29/29, typecheck exit 0, build exit 0 | Done (local; Railway redeploy pending owner approval) |
 
 ## Decisions / deviations
 
@@ -301,6 +302,43 @@ Known limits/blockers: Docker not installed (image build + volume container smok
   on-Railway 1 vCPU/512 MB load, redeploy persistence, and backup/recovery drill not yet executed (owner approval);
   local load ran on a workstation, so treat the p95/RSS figures as indicative, not acceptance
 Next exact task: obtain owner approval, then execute docs/19_STAGING_CHECKLIST.md on Railway (image build →
-  service+volume → health → identity → redeploy persistence → backup schedule + recovery drill → on-Railway
-  100-user load → rollback/go-no-go). Do NOT start P7 until P6's Railway evidence exists and the owner approves.
+   service+volume → health → identity → redeploy persistence → backup schedule + recovery drill → on-Railway
+   100-user load → rollback/go-no-go). Do NOT start P7 until P6's Railway evidence exists and the owner approves.
+```
+
+## Session handoff (Railway login failure fix)
+
+```text
+Phase/task: Production blocker fixed — Railway login failed with "ERROR [Better Auth]: Invalid origin:
+  http://ticket-portal-production.up.railway.app" (public site is HTTPS)
+Cause: src/routes/api-auth.ts:24 and src/routes/auth-pages.ts:27 built the Web Request handed to
+  Better Auth with a hardcoded `http://${req.headers.host}` base. Behind Railway's TLS-terminating proxy
+  the internal socket is plain HTTP, so Better Auth's origin validation (which infers the origin from the
+  request URL when the browser sends `Origin: null` + `Sec-Fetch-Site: same-origin`) saw an `http://`
+  origin that failed the strict match against the trusted `https://` origin. Also found: Better Auth
+  silently skips ALL origin/CSRF validation when NODE_ENV=test (create-context.mjs `isTest()` default),
+  so the test suite could never have caught this — it is now explicitly re-enabled in tests.
+Changed files: src/auth/auth.ts (new `publicRequestBase(config, host)` helper — Request URL base is the
+  validated BETTER_AUTH_URL, falling back to `http://<host>` only when unset; `advanced.disableOriginCheck:
+  false` so tests enforce production origin rules), src/routes/api-auth.ts + src/routes/auth-pages.ts
+  (use the helper), tests/proxied-https.test.ts (new: 8 tests — proxied form sign-in + Secure cookie,
+  Origin:null inference path, session usability, cross-origin rejection on /login and /api/auth/*,
+  logout, JSON sign-in, get-session)
+Commands executed: npx vitest run tests/proxied-https.test.ts (pre-fix: reproduced the exact production
+  error; post-fix 8/8); npx vitest run (117/117, 16 files); npm run typecheck (exit 0); npm run build
+  (exit 0); npm run test:e2e (Playwright 4/4); npm run test:e2e:tarmy (29/29, 10 files)
+Tests: all passed — proxied-https 8/8, vitest 117/117, Playwright 4/4, TesterArmy deterministic 29/29,
+  typecheck exit 0, build exit 0
+Security/performance observations: fix preserves strict trusted-origin validation (cross-origin sign-in
+  now asserted 401/403 in tests); no CSRF weakening, no new origins trusted, no http:// origin added;
+  session cookies remain __Secure-prefixed + Secure + HttpOnly (driven by https baseURL); existing
+  behavior unchanged for all local/E2E configs (they set BETTER_AUTH_URL to the real local origin);
+  no DB reset, no new admin, BETTER_AUTH_SECRET untouched
+Kage refs used: none (no UI work)
+Known limits/blockers: the fix is verified locally against the production topology (simulated); the
+  actual Railway redeploy + live sign-in check is still pending owner approval (Docker not installed
+  on this machine). No deploy was performed.
+Next exact task: owner approval → redeploy on Railway → verify live sign-in at
+  https://ticket-portal-production.up.railway.app (existing admin, no data changes) → then continue
+  docs/19_STAGING_CHECKLIST.md
 ```

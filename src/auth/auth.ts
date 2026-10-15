@@ -32,8 +32,29 @@ export function createAuth(db: AppDatabase, config: AppConfig) {
       updateAge: 60 * 60 * 24,
     },
     trustedOrigins: trustedOrigins.length > 0 ? trustedOrigins : undefined,
+    advanced: {
+      // Better Auth silently skips origin/CSRF validation when NODE_ENV=test.
+      // Keep it enabled in tests so the suite enforces the same trusted-origin
+      // rules as production (a regression was found via this gap).
+      disableOriginCheck: false,
+    },
     plugins: [admin()],
   });
 }
 
 export type AppAuth = ReturnType<typeof createAuth>;
+
+/**
+ * Base URL for the Web Request handed to Better Auth.
+ *
+ * Better Auth derives its origin validation (including the `Origin: null`
+ * inference) from the request URL, so that URL must carry the configured
+ * public origin (BETTER_AUTH_URL). Behind a TLS-terminating proxy the internal
+ * socket is always plain HTTP, so deriving the scheme from the socket would
+ * fabricate an `http://` origin that fails the trusted-origin check. Falls
+ * back to the request host only when BETTER_AUTH_URL is not configured
+ * (local development).
+ */
+export function publicRequestBase(config: AppConfig, host?: string): string {
+  return config.betterAuthUrl ?? `http://${host ?? 'localhost'}`;
+}
