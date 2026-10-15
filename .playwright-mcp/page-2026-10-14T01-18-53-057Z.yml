@@ -1,0 +1,89 @@
+- generic [active] [ref=f17e1]:
+  - link "Skip to content" [ref=f17e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f17e3]:
+    - generic [ref=f17e4]: Ticketing
+    - navigation "Main" [ref=f17e6]:
+      - link "Home" [ref=f17e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f17e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f17e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f17e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f17e11]:
+      - generic [ref=f17e12]:
+        - paragraph [ref=f17e13]: Admin
+        - paragraph [ref=f17e14]: admin@example.com · admin
+      - button "Sign out" [ref=f17e16]
+  - generic [ref=f17e17]:
+    - banner [ref=f17e18]:
+      - generic [ref=f17e19]: Ticketing
+      - button "Menu" [ref=f17e20]
+    - main [ref=f17e24]:
+      - generic [ref=f17e25]:
+        - link "Tickets" [ref=f17e26] [cursor=pointer]:
+          - /url: /tickets
+        - generic [aria-hidden] [ref=f17e27]: /
+        - generic [ref=f17e28]: TKT-000001
+      - generic [ref=f17e29]:
+        - heading "Printer on floor 2 offline" [level=1] [ref=f17e30]
+        - generic [ref=f17e31]: ASSIGNED
+      - generic [ref=f17e32]:
+        - generic [ref=f17e33]:
+          - region [ref=f17e34]:
+            - heading "Description" [level=2] [ref=f17e35]
+            - paragraph [ref=f17e36]: The shared printer on floor 2 is offline and jobs are queuing. Users report a paper jam error that persists after clearing the tray.
+          - region [ref=f17e37]:
+            - heading "Comments" [level=2] [ref=f17e38]
+            - list [ref=f17e39]:
+              - listitem [ref=f17e40]: No comments yet.
+            - generic [ref=f17e41]:
+              - generic [ref=f17e42]: Comment
+              - textbox "Comment" [ref=f17e43]:
+                - /placeholder: Add a comment…
+              - generic [ref=f17e44]:
+                - checkbox "Internal note" [ref=f17e45]
+                - text: Internal note
+              - button "Comment" [ref=f17e47]
+          - region [ref=f17e48]:
+            - heading "Activity" [level=2] [ref=f17e49]
+            - list [ref=f17e50]:
+              - listitem [ref=f17e51]:
+                - generic [ref=f17e52]: 2026-10-14 01:14 UTC
+                - generic [ref=f17e53]: Admin — TICKET_CREATED
+              - listitem [ref=f17e54]:
+                - generic [ref=f17e55]: 2026-10-14 01:14 UTC
+                - generic [ref=f17e56]: Admin — ASSIGNEE_CHANGED
+        - complementary [ref=f17e57]:
+          - region [ref=f17e58]:
+            - heading "Details" [level=2] [ref=f17e59]
+            - generic [ref=f17e60]:
+              - generic [ref=f17e61]:
+                - term [ref=f17e62]: Priority
+                - definition [ref=f17e63]: MEDIUM
+              - generic [ref=f17e64]:
+                - term [ref=f17e65]: Assignee
+                - definition [ref=f17e66]: "Assignee: Manager"
+              - generic [ref=f17e67]:
+                - term [ref=f17e68]: Created
+                - definition [ref=f17e69]: 2026-10-14 01:14 UTC
+              - generic [ref=f17e70]:
+                - term [ref=f17e71]: Updated
+                - definition [ref=f17e72]: 2026-10-14 01:14 UTC
+          - region [ref=f17e73]:
+            - heading "Assignment" [level=2] [ref=f17e74]
+            - button "Assign" [ref=f17e76] [cursor=pointer]
+          - region [ref=f17e77]:
+            - heading "Work actions" [level=2] [ref=f17e78]
+            - generic [ref=f17e79]:
+              - button "Start work" [ref=f17e81] [cursor=pointer]
+              - button "Block" [ref=f17e83] [cursor=pointer]
+              - button "Resolve" [ref=f17e85] [cursor=pointer]
+          - region [ref=f17e86]:
+            - heading "More" [level=2] [ref=f17e87]
+            - generic [ref=f17e88]:
+              - link "Edit" [ref=f17e89] [cursor=pointer]:
+                - /url: /tickets/8b6166f1-27e2-4dae-8b51-e85a66a7bd77/edit
+              - button "Watch" [ref=f17e91]

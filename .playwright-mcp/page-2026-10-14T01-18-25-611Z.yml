@@ -1,0 +1,77 @@
+- generic [active] [ref=f12e1]:
+  - link "Skip to content" [ref=f12e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f12e3]:
+    - generic [ref=f12e4]: Ticketing
+    - navigation "Main" [ref=f12e6]:
+      - link "Home" [ref=f12e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f12e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f12e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f12e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f12e11]:
+      - generic [ref=f12e12]:
+        - paragraph [ref=f12e13]: Admin
+        - paragraph [ref=f12e14]: admin@example.com · admin
+      - button "Sign out" [ref=f12e16]
+  - main [ref=f12e18]:
+    - heading "New ticket" [level=1] [ref=f12e19]
+    - generic [ref=f12e20]:
+      - generic [ref=f12e21]:
+        - text: Title *
+        - textbox "Title *" [ref=f12e22]
+      - generic [ref=f12e23]:
+        - text: Description *
+        - textbox "Description *" [ref=f12e24]
+      - generic [ref=f12e25]:
+        - generic [ref=f12e26]:
+          - text: Kind
+          - combobox "Kind" [ref=f12e27]:
+            - option "TASK" [selected]
+            - option "INCIDENT"
+            - option "REQUEST"
+            - option "BUG"
+        - generic [ref=f12e28]:
+          - text: Category
+          - combobox "Category" [ref=f12e29]:
+            - option "Unsorted" [selected]
+            - option "General"
+            - option "Infrastructure"
+            - option "IT Support"
+            - option "Other"
+            - option "Security"
+        - generic [ref=f12e30]:
+          - text: Team
+          - combobox "Team" [ref=f12e31]:
+            - option "No team" [selected]
+            - option "General"
+        - generic [ref=f12e32]:
+          - text: Visibility
+          - combobox "Visibility" [ref=f12e33]:
+            - option "TEAM" [selected]
+            - option "RESTRICTED"
+        - generic [ref=f12e34]:
+          - text: Priority
+          - combobox "Priority" [ref=f12e35]:
+            - option "LOW"
+            - option "MEDIUM" [selected]
+            - option "HIGH"
+            - option "CRITICAL"
+        - generic [ref=f12e36]:
+          - text: Assignee
+          - combobox "Assignee" [ref=f12e37]:
+            - option "Unassigned" [selected]
+            - option "Admin"
+            - option "Manager"
+            - option "User"
+            - option "Viewer"
+        - generic [ref=f12e38]:
+          - text: Due
+          - textbox "Due" [ref=f12e39]
+      - generic [ref=f12e40]:
+        - button "Create ticket" [ref=f12e41]
+        - link "Cancel" [ref=f12e42] [cursor=pointer]:
+          - /url: /tickets

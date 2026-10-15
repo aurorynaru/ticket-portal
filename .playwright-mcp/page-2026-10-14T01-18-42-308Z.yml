@@ -1,0 +1,57 @@
+- generic [active] [ref=f15e1]:
+  - link "Skip to content" [ref=f15e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f15e3]:
+    - generic [ref=f15e4]: Ticketing
+    - navigation "Main" [ref=f15e6]:
+      - link "Home" [ref=f15e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f15e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f15e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f15e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f15e11]:
+      - generic [ref=f15e12]:
+        - paragraph [ref=f15e13]: Admin
+        - paragraph [ref=f15e14]: admin@example.com · admin
+      - button "Sign out" [ref=f15e16]
+  - main [ref=f15e18]:
+    - generic [ref=f15e19]:
+      - heading "Tickets" [level=1] [ref=f15e20]
+      - link "New ticket" [ref=f15e21] [cursor=pointer]:
+        - /url: /tickets/new
+    - generic [ref=f15e22]:
+      - generic [ref=f15e23]:
+        - generic [ref=f15e24]: Status
+        - combobox "Status" [ref=f15e25]:
+          - option "All"
+          - option "OPEN"
+          - option "ASSIGNED"
+          - option "IN_PROGRESS"
+          - option "BLOCKED"
+          - option "RESOLVED"
+          - option "CLOSED" [selected]
+      - generic [ref=f15e26]:
+        - generic [ref=f15e27]: Scope
+        - combobox "Scope" [ref=f15e28]:
+          - option "All" [selected]
+          - option "Created by me"
+          - option "Assigned to me"
+      - button "Filter" [ref=f15e29]
+    - table [ref=f15e31]:
+      - rowgroup [ref=f15e32]:
+        - row [ref=f15e33]:
+          - columnheader "No." [ref=f15e34]
+          - columnheader "Title" [ref=f15e35]
+          - columnheader "Status" [ref=f15e36]
+          - columnheader "Priority" [ref=f15e37]
+          - columnheader "Assignee" [ref=f15e38]
+          - columnheader "Created" [ref=f15e39]
+      - rowgroup [ref=f15e40]:
+        - row [ref=f15e41]:
+          - cell [ref=f15e42]:
+            - text: No tickets match the current filters.
+            - link "Create one" [ref=f15e43] [cursor=pointer]:
+              - /url: /tickets/new

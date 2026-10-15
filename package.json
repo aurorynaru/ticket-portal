@@ -1,0 +1,62 @@
+{
+  "name": "ticketing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lightweight internal ticketing system (Fastify + EJS/HTMX + SQLite)",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "npm run build:ts && npm run build:css",
+    "build:ts": "tsc -p tsconfig.json",
+    "build:css": "tailwindcss -i src/styles/input.css -o public/assets/app.css --minify",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:tarmy": "npm run build && e2e run --exclude-tag exploratory",
+    "test:e2e:tarmy:all": "npm run build && e2e run",
+    "test:e2e:tarmy:explore": "npm run build && e2e run tests/exploratory.e2e.ts",
+    "db:migrate": "tsx src/db/cli-migrate.ts",
+    "db:integrity": "tsx src/db/cli-integrity.ts",
+    "db:backup": "tsx src/db/cli-backup.ts",
+    "db:restore": "tsx src/db/cli-restore.ts",
+    "load:seed": "tsx scripts/seed-load.ts",
+    "load:mixed": "k6 run --env TARGET=http://127.0.0.1:3199 load/k6/mixed.js",
+    "load:burst": "k6 run --env TARGET=http://127.0.0.1:3199 load/k6/burst.js",
+    "auth:migrate": "auth migrate --config src/auth/cli-config.ts",
+    "auth:create-admin": "auth create-admin --config src/auth/cli-config.ts",
+    "seed:e2e": "tsx scripts/seed-e2e.ts"
+  },
+  "dependencies": {
+    "@fastify/formbody": "9.0.1",
+    "@fastify/helmet": "13.1.2",
+    "@fastify/multipart": "10.1.3",
+    "@fastify/rate-limit": "11.2.1",
+    "@fastify/static": "10.1.6",
+    "@fastify/view": "12.0.1",
+    "better-auth": "1.7.7",
+    "better-sqlite3": "12.11.1",
+    "ejs": "7.0.1",
+    "fastify": "5.12.6",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@ai-sdk/openai-compatible": "^3.0.68",
+    "@e2e-dev/web": "^0.14.0",
+    "@playwright/test": "1.64.0",
+    "@tailwindcss/cli": "4.3.3",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/ejs": "3.1.5",
+    "@types/node": "24.19.2",
+    "ai": "^7.0.138",
+    "auth": "1.7.7",
+    "e2e": "^0.20.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.4"
+  }
+}

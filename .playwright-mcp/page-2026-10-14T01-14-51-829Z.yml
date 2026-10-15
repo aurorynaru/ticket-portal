@@ -1,0 +1,89 @@
+- generic [active] [ref=f8e1]:
+  - link "Skip to content" [ref=f8e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f8e3]:
+    - generic [ref=f8e4]: Ticketing
+    - navigation "Main" [ref=f8e6]:
+      - link "Home" [ref=f8e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f8e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f8e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f8e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f8e11]:
+      - generic [ref=f8e12]:
+        - paragraph [ref=f8e13]: Admin
+        - paragraph [ref=f8e14]: admin@example.com · admin
+      - button "Sign out" [ref=f8e16]
+  - generic [ref=f8e17]:
+    - banner [ref=f8e18]:
+      - generic [ref=f8e19]: Ticketing
+      - button "Menu" [ref=f8e20]
+    - main [ref=f8e24]:
+      - generic [ref=f8e25]:
+        - link "Tickets" [ref=f8e26] [cursor=pointer]:
+          - /url: /tickets
+        - generic [aria-hidden] [ref=f8e27]: /
+        - generic [ref=f8e28]: TKT-000001
+      - generic [ref=f8e29]:
+        - heading "Printer on floor 2 offline" [level=1] [ref=f8e30]
+        - generic [ref=f8e31]: ASSIGNED
+      - generic [ref=f8e32]:
+        - generic [ref=f8e33]:
+          - region [ref=f8e34]:
+            - heading "Description" [level=2] [ref=f8e35]
+            - paragraph [ref=f8e36]: The shared printer on floor 2 is offline and jobs are queuing. Users report a paper jam error that persists after clearing the tray.
+          - region [ref=f8e37]:
+            - heading "Comments" [level=2] [ref=f8e38]
+            - list [ref=f8e39]:
+              - listitem [ref=f8e40]: No comments yet.
+            - generic [ref=f8e41]:
+              - generic [ref=f8e42]: Comment
+              - textbox "Comment" [ref=f8e43]:
+                - /placeholder: Add a comment…
+              - generic [ref=f8e44]:
+                - checkbox "Internal note" [ref=f8e45]
+                - text: Internal note
+              - button "Comment" [ref=f8e47]
+          - region [ref=f8e48]:
+            - heading "Activity" [level=2] [ref=f8e49]
+            - list [ref=f8e50]:
+              - listitem [ref=f8e51]:
+                - generic [ref=f8e52]: 2026-10-14 01:14 UTC
+                - generic [ref=f8e53]: Admin — TICKET_CREATED
+              - listitem [ref=f8e54]:
+                - generic [ref=f8e55]: 2026-10-14 01:14 UTC
+                - generic [ref=f8e56]: Admin — ASSIGNEE_CHANGED
+        - complementary [ref=f8e57]:
+          - region [ref=f8e58]:
+            - heading "Details" [level=2] [ref=f8e59]
+            - generic [ref=f8e60]:
+              - generic [ref=f8e61]:
+                - term [ref=f8e62]: Priority
+                - definition [ref=f8e63]: MEDIUM
+              - generic [ref=f8e64]:
+                - term [ref=f8e65]: Assignee
+                - definition [ref=f8e66]: "Assignee: Manager"
+              - generic [ref=f8e67]:
+                - term [ref=f8e68]: Created
+                - definition [ref=f8e69]: 2026-10-14 01:14 UTC
+              - generic [ref=f8e70]:
+                - term [ref=f8e71]: Updated
+                - definition [ref=f8e72]: 2026-10-14 01:14 UTC
+          - region [ref=f8e73]:
+            - heading "Assignment" [level=2] [ref=f8e74]
+            - button "Assign" [ref=f8e76] [cursor=pointer]
+          - region [ref=f8e77]:
+            - heading "Work actions" [level=2] [ref=f8e78]
+            - generic [ref=f8e79]:
+              - button "Start work" [ref=f8e81] [cursor=pointer]
+              - button "Block" [ref=f8e83] [cursor=pointer]
+              - button "Resolve" [ref=f8e85] [cursor=pointer]
+          - region [ref=f8e86]:
+            - heading "More" [level=2] [ref=f8e87]
+            - generic [ref=f8e88]:
+              - link "Edit" [ref=f8e89] [cursor=pointer]:
+                - /url: /tickets/8b6166f1-27e2-4dae-8b51-e85a66a7bd77/edit
+              - button "Watch" [ref=f8e91]

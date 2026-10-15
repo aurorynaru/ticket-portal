@@ -1,0 +1,49 @@
+- generic [active] [ref=f7e1]:
+  - link "Skip to content" [ref=f7e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f7e3]:
+    - generic [ref=f7e4]: Ticketing
+    - navigation "Main" [ref=f7e6]:
+      - link "Home" [ref=f7e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f7e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f7e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f7e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f7e11]:
+      - generic [ref=f7e12]:
+        - paragraph [ref=f7e13]: Admin
+        - paragraph [ref=f7e14]: admin@example.com · admin
+      - button "Sign out" [ref=f7e16]
+  - generic [ref=f7e17]:
+    - banner [ref=f7e18]:
+      - generic [ref=f7e19]: Ticketing
+      - button "Menu" [ref=f7e20]
+    - main [ref=f7e24]:
+      - generic [ref=f7e25]:
+        - generic [ref=f7e26]:
+          - heading "Welcome, Admin" [level=1] [ref=f7e27]
+          - paragraph [ref=f7e28]: "Signed in as admin@example.com · role: admin"
+        - link "New ticket" [ref=f7e29] [cursor=pointer]:
+          - /url: /tickets/new
+      - generic [ref=f7e30]:
+        - generic [ref=f7e31]:
+          - term [ref=f7e32]: Schema version
+          - definition [ref=f7e33]: "3"
+        - generic [ref=f7e34]:
+          - term [ref=f7e35]: Environment
+          - definition [ref=f7e36]: test
+      - generic [ref=f7e37]:
+        - heading "Getting started" [level=2] [ref=f7e38]
+        - list [ref=f7e39]:
+          - listitem [ref=f7e40]:
+            - link "Browse all tickets" [ref=f7e41] [cursor=pointer]:
+              - /url: /tickets
+          - listitem [ref=f7e42]:
+            - link "See tickets assigned to you" [ref=f7e43] [cursor=pointer]:
+              - /url: /tickets?scope=assigned
+          - listitem [ref=f7e44]:
+            - link "Create a new ticket" [ref=f7e45] [cursor=pointer]:
+              - /url: /tickets/new

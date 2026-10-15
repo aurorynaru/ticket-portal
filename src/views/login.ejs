@@ -1,0 +1,29 @@
+<%- include('partials/head') %>
+<main class="flex min-h-screen items-center justify-center px-6 py-12">
+  <div class="w-full max-w-sm">
+    <div class="mb-8 text-center">
+      <h1 class="text-lg font-semibold tracking-tight">Ticketing</h1>
+      <p class="mt-1 text-sm text-ink-soft">Sign in to your account</p>
+    </div>
+    <div class="rounded-lg border border-line bg-surface p-6">
+      <% if (showLoginError) { %>
+        <p role="alert" class="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">Invalid email or password.</p>
+      <% } %>
+      <form method="post" action="/login" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-ink">Email</label>
+          <input id="email" name="email" type="email" required autocomplete="email"
+                 class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm placeholder:text-ink-faint focus:border-accent" />
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-ink">Password</label>
+          <input id="password" name="password" type="password" required autocomplete="current-password"
+                 class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm focus:border-accent" />
+        </div>
+        <button type="submit" class="w-full rounded-md bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">Sign in</button>
+      </form>
+    </div>
+    <p class="mt-6 text-center text-xs text-ink-faint">Access is provisioned by an administrator.</p>
+  </div>
+</main>
+<%- include('partials/foot') %>

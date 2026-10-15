@@ -1,0 +1,81 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main id="main-content" class="mx-auto w-full max-w-[1400px] flex-1 px-4 py-8 sm:px-6 lg:px-8">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-xl font-semibold tracking-tight">Tickets</h1>
+    <% if (canCreate) { %>
+      <a href="/tickets/new" class="rounded-md bg-ink px-3.5 py-2 text-sm font-medium text-white hover:bg-zinc-800">New ticket</a>
+    <% } %>
+  </div>
+
+  <form method="get" action="/tickets" class="mt-6 flex flex-wrap items-end gap-3 rounded-lg border border-line bg-surface p-3">
+    <div>
+      <label for="status" class="block text-xs font-medium text-ink-soft">Status</label>
+      <select id="status" name="status" class="mt-1 rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm">
+        <option value="">All</option>
+        <% for (const s of statuses) { %>
+          <option value="<%= s %>" <%= statusFilter === s ? 'selected' : '' %>><%= s %></option>
+        <% } %>
+      </select>
+    </div>
+    <div>
+      <label for="scope" class="block text-xs font-medium text-ink-soft">Scope</label>
+      <select id="scope" name="scope" class="mt-1 rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm">
+        <option value="all" <%= scopeFilter === 'all' ? 'selected' : '' %>>All</option>
+        <option value="mine" <%= scopeFilter === 'mine' ? 'selected' : '' %>>Created by me</option>
+        <option value="assigned" <%= scopeFilter === 'assigned' ? 'selected' : '' %>>Assigned to me</option>
+      </select>
+    </div>
+    <button type="submit" class="rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-ink-soft hover:bg-line-soft">Filter</button>
+  </form>
+
+  <div class="mt-4 overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="w-full min-w-[720px] text-sm">
+      <thead>
+        <tr class="border-b border-line text-left text-xs uppercase tracking-wide text-ink-faint">
+          <th scope="col" class="px-4 py-2.5 font-medium">No.</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Title</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Status</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Priority</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Assignee</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (rows.length === 0) { %>
+          <tr>
+            <td colspan="6" class="px-4 py-12 text-center text-sm text-ink-faint">
+              No tickets match the current filters.
+              <% if (canCreate) { %><a href="/tickets/new" class="text-accent hover:underline">Create one</a><% } %>
+            </td>
+          </tr>
+        <% } %>
+        <% for (const r of rows) { %>
+          <tr class="border-b border-line-soft last:border-0 hover:bg-line-soft/60">
+            <td class="px-4 py-2.5 font-mono text-xs tabular-nums text-ink-faint"><%= r.ticket_no %></td>
+            <td class="px-4 py-2.5">
+              <a href="/tickets/<%= r.id %>" class="font-medium text-ink hover:text-accent hover:underline"><%= r.title %></a>
+            </td>
+            <td class="px-4 py-2.5">
+              <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium <%= statusClass(r.status) %>"><%= r.status %></span>
+            </td>
+            <td class="px-4 py-2.5 text-ink-soft"><%= r.priority %></td>
+            <td class="px-4 py-2.5 text-ink-soft"><%= r.assignee || '—' %></td>
+            <td class="px-4 py-2.5 text-ink-faint"><%= fmtTime(r.created_at) %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if (pages > 1) { %>
+    <nav class="mt-4 flex items-center justify-between text-sm" aria-label="Pagination">
+      <span class="text-ink-faint">Page <%= page %> of <%= pages %> · <%= total %> tickets</span>
+      <div class="flex gap-2">
+        <% if (page > 1) { %><a class="rounded-md border border-line bg-surface px-3 py-1.5 text-ink-soft hover:bg-line-soft" href="/tickets?page=<%= page - 1 %>&status=<%= statusFilter %>&scope=<%= scopeFilter %>">Previous</a><% } %>
+        <% if (page < pages) { %><a class="rounded-md border border-line bg-surface px-3 py-1.5 text-ink-soft hover:bg-line-soft" href="/tickets?page=<%= page + 1 %>&status=<%= statusFilter %>&scope=<%= scopeFilter %>">Next</a><% } %>
+      </div>
+    </nav>
+  <% } %>
+</main>
+<%- include('partials/foot') %>

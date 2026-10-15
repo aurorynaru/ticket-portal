@@ -1,0 +1,61 @@
+- generic [active] [ref=f10e1]:
+  - link "Skip to content" [ref=f10e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f10e3]:
+    - generic [ref=f10e4]: Ticketing
+    - navigation "Main" [ref=f10e6]:
+      - link "Home" [ref=f10e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f10e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f10e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f10e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f10e11]:
+      - generic [ref=f10e12]:
+        - paragraph [ref=f10e13]: Admin
+        - paragraph [ref=f10e14]: admin@example.com · admin
+      - button "Sign out" [ref=f10e16]
+  - main [ref=f10e18]:
+    - generic [ref=f10e19]:
+      - heading "Tickets" [level=1] [ref=f10e20]
+      - link "New ticket" [ref=f10e21] [cursor=pointer]:
+        - /url: /tickets/new
+    - generic [ref=f10e22]:
+      - generic [ref=f10e23]:
+        - generic [ref=f10e24]: Status
+        - combobox "Status" [ref=f10e25]:
+          - option "All" [selected]
+          - option "OPEN"
+          - option "ASSIGNED"
+          - option "IN_PROGRESS"
+          - option "BLOCKED"
+          - option "RESOLVED"
+          - option "CLOSED"
+      - generic [ref=f10e26]:
+        - generic [ref=f10e27]: Scope
+        - combobox "Scope" [ref=f10e28]:
+          - option "All" [selected]
+          - option "Created by me"
+          - option "Assigned to me"
+      - button "Filter" [ref=f10e29]
+    - table [ref=f10e31]:
+      - rowgroup [ref=f10e32]:
+        - row [ref=f10e33]:
+          - columnheader "No." [ref=f10e34]
+          - columnheader "Title" [ref=f10e35]
+          - columnheader "Status" [ref=f10e36]
+          - columnheader "Priority" [ref=f10e37]
+          - columnheader "Assignee" [ref=f10e38]
+          - columnheader "Created" [ref=f10e39]
+      - rowgroup [ref=f10e40]:
+        - row [ref=f10e41]:
+          - cell "1" [ref=f10e42]
+          - cell [ref=f10e43]:
+            - link "Printer on floor 2 offline" [ref=f10e44] [cursor=pointer]:
+              - /url: /tickets/8b6166f1-27e2-4dae-8b51-e85a66a7bd77
+          - cell "ASSIGNED" [ref=f10e45]
+          - cell "MEDIUM" [ref=f10e47]
+          - cell "—" [ref=f10e48]
+          - cell "2026-10-14 01:14 UTC" [ref=f10e49]

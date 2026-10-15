@@ -1,0 +1,43 @@
+<% const navCurrent = (typeof current !== 'undefined') ? current : ''; %>
+<% function navCls(key) { return navCurrent === key ? 'bg-accent-soft font-medium text-accent' : 'text-ink-soft hover:bg-line-soft hover:text-ink'; } %>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<aside id="app-sidebar" class="fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-line bg-surface transition-transform duration-200 ease-out lg:translate-x-0">
+  <div class="flex h-14 shrink-0 items-center border-b border-line px-5">
+    <span class="text-sm font-semibold tracking-tight">Ticketing</span>
+  </div>
+  <nav class="flex-1 space-y-0.5 overflow-y-auto px-3 py-4" aria-label="Main">
+    <a href="/" aria-current="<%= navCurrent === 'home' || navCurrent === 'dashboard' ? 'page' : false %>" class="block rounded-md px-3 py-2 text-sm <%= navCls('dashboard') %>">Dashboard</a>
+    <a href="/tickets" aria-current="<%= navCurrent === 'tickets' || navCurrent === 'ticket' || navCurrent === 'new' || navCurrent === 'edit' ? 'page' : false %>" class="block rounded-md px-3 py-2 text-sm <%= navCls('tickets') %>">Tickets</a>
+    <a href="/search" aria-current="<%= navCurrent === 'search' ? 'page' : false %>" class="block rounded-md px-3 py-2 text-sm <%= navCls('search') %>">Search</a>
+    <a href="/notifications" aria-current="<%= navCurrent === 'notifications' ? 'page' : false %>" class="flex items-center justify-between rounded-md px-3 py-2 text-sm <%= navCls('notifications') %>">
+      <span>Notifications</span>
+      <span data-unread-badge data-poll-seconds="<%= pollSeconds %>" class="hidden rounded-full bg-accent px-1.5 text-xs font-medium text-white">0</span>
+    </a>
+    <% if (role === 'admin') { %>
+      <a href="/admin/users" aria-current="<%= navCurrent === 'admin' ? 'page' : false %>" class="block rounded-md px-3 py-2 text-sm <%= navCls('admin') %>">Users</a>
+    <% } %>
+    <a href="/account" aria-current="<%= navCurrent === 'account' ? 'page' : false %>" class="block rounded-md px-3 py-2 text-sm <%= navCls('account') %>">Account</a>
+  </nav>
+  <div class="shrink-0 border-t border-line p-3">
+    <div class="px-2 py-1.5">
+      <p class="truncate text-sm font-medium"><%= user.name %></p>
+      <p class="truncate text-xs text-ink-faint"><%= user.email %> · <%= user.role %></p>
+    </div>
+    <form method="post" action="/logout" class="mt-2">
+      <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+      <button type="submit" class="w-full rounded-md border border-line px-3 py-1.5 text-sm text-ink-soft hover:bg-line-soft hover:text-ink">Sign out</button>
+    </form>
+  </div>
+</aside>
+<div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-ink/40 lg:hidden"></div>
+<div class="flex min-h-screen flex-col lg:pl-60">
+  <header class="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-line bg-surface px-4 lg:hidden">
+    <span class="text-sm font-semibold tracking-tight">Ticketing</span>
+    <button type="button" data-menu-toggle aria-expanded="false" aria-controls="app-sidebar"
+      class="rounded-md border border-line p-2 text-ink-soft hover:bg-line-soft">
+      <span class="sr-only">Menu</span>
+      <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+  </header>

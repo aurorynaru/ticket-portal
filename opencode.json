@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "kage": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://kage.design/mcp"
+    }
+  }
+}

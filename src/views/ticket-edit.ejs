@@ -1,0 +1,74 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main id="main-content" class="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+  <p class="font-mono text-xs text-ink-faint"><a href="/tickets/<%= ticket.id %>" class="hover:underline"><%= ticketNo %></a></p>
+  <h1 class="mt-1 text-xl font-semibold tracking-tight">Edit ticket</h1>
+
+  <% if (errors.length > 0) { %>
+    <div role="alert" class="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      <% errors.forEach(function (e) { %><p><%= e %></p><% }); %>
+    </div>
+  <% } %>
+
+  <form method="post" action="/tickets/<%= ticket.id %>" class="mt-6 space-y-5 rounded-lg border border-line bg-surface p-6">
+    <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+    <input type="hidden" name="version" value="<%= ticket.version %>" />
+
+    <label class="block text-sm font-medium text-ink">Title *
+      <input type="text" name="title" required maxlength="200" value="<%= ticket.title %>"
+        class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm focus:border-accent" />
+    </label>
+
+    <label class="block text-sm font-medium text-ink">Description *
+      <textarea name="description" required rows="5" maxlength="10000"
+        class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm focus:border-accent"><%= ticket.description %></textarea>
+    </label>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <label class="block text-sm font-medium text-ink">Priority
+        <select name="priority" class="mt-1 w-full rounded-md border border-line bg-surface px-2 py-2 text-sm">
+          <% priorities.forEach(function (p) { %>
+            <option value="<%= p %>" <%= ticket.priority === p ? 'selected' : '' %>><%= p %></option>
+          <% }); %>
+        </select>
+      </label>
+
+      <label class="block text-sm font-medium text-ink">Visibility
+        <select name="visibility" class="mt-1 w-full rounded-md border border-line bg-surface px-2 py-2 text-sm">
+          <% visibilities.forEach(function (v) { %>
+            <option value="<%= v %>" <%= ticket.visibility === v ? 'selected' : '' %>><%= v %></option>
+          <% }); %>
+        </select>
+      </label>
+
+      <label class="block text-sm font-medium text-ink">Category
+        <select name="categoryId" class="mt-1 w-full rounded-md border border-line bg-surface px-2 py-2 text-sm">
+          <option value="">Unsorted</option>
+          <% categories.forEach(function (c) { %>
+            <option value="<%= c.id %>" <%= ticket.category_id === c.id ? 'selected' : '' %>><%= c.name %></option>
+          <% }); %>
+        </select>
+      </label>
+
+      <label class="block text-sm font-medium text-ink">Team
+        <select name="teamId" class="mt-1 w-full rounded-md border border-line bg-surface px-2 py-2 text-sm">
+          <option value="">No team</option>
+          <% teams.forEach(function (t) { %>
+            <option value="<%= t.id %>" <%= ticket.team_id === t.id ? 'selected' : '' %>><%= t.name %></option>
+          <% }); %>
+        </select>
+      </label>
+
+      <label class="block text-sm font-medium text-ink">Due
+        <input type="datetime-local" name="dueAt" value="<%= ticket.due_at ? new Date(ticket.due_at).toISOString().slice(0, 16) : '' %>"
+          class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm" />
+      </label>
+    </div>
+
+    <div class="flex items-center gap-3 border-t border-line-soft pt-4">
+      <button type="submit" class="rounded-md bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">Save changes</button>
+      <a href="/tickets/<%= ticket.id %>" class="text-sm text-ink-soft hover:text-ink">Cancel</a>
+    </div>
+  </form>
+</main>
+<%- include('partials/foot') %>

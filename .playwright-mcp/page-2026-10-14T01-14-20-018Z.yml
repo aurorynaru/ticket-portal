@@ -1,0 +1,81 @@
+- generic [ref=f3e1]:
+  - link "Skip to content" [ref=f3e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f3e3]:
+    - generic [ref=f3e4]: Ticketing
+    - navigation "Main" [ref=f3e6]:
+      - link "Home" [ref=f3e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f3e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f3e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f3e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f3e11]:
+      - generic [ref=f3e12]:
+        - paragraph [ref=f3e13]: Admin
+        - paragraph [ref=f3e14]: admin@example.com · admin
+      - button "Sign out" [ref=f3e16]
+  - generic [ref=f3e17]:
+    - banner [ref=f3e18]:
+      - generic [ref=f3e19]: Ticketing
+      - button "Menu" [ref=f3e20]
+    - main [ref=f3e24]:
+      - heading "New ticket" [level=1] [ref=f3e25]
+      - generic [ref=f3e26]:
+        - generic [ref=f3e27]:
+          - text: Title *
+          - textbox "Title *" [ref=f3e28]: Printer on floor 2 offline
+        - generic [ref=f3e29]:
+          - text: Description *
+          - textbox "Description *" [active] [ref=f3e30]: The shared printer on floor 2 is offline and jobs are queuing. Users report a paper jam error that persists after clearing the tray.
+        - generic [ref=f3e31]:
+          - generic [ref=f3e32]:
+            - text: Kind
+            - combobox "Kind" [ref=f3e33]:
+              - option "TASK" [selected]
+              - option "INCIDENT"
+              - option "REQUEST"
+              - option "BUG"
+          - generic [ref=f3e34]:
+            - text: Category
+            - combobox "Category" [ref=f3e35]:
+              - option "Unsorted" [selected]
+              - option "General"
+              - option "Infrastructure"
+              - option "IT Support"
+              - option "Other"
+              - option "Security"
+          - generic [ref=f3e36]:
+            - text: Team
+            - combobox "Team" [ref=f3e37]:
+              - option "No team" [selected]
+              - option "General"
+          - generic [ref=f3e38]:
+            - text: Visibility
+            - combobox "Visibility" [ref=f3e39]:
+              - option "TEAM" [selected]
+              - option "RESTRICTED"
+          - generic [ref=f3e40]:
+            - text: Priority
+            - combobox "Priority" [ref=f3e41]:
+              - option "LOW"
+              - option "MEDIUM" [selected]
+              - option "HIGH"
+              - option "CRITICAL"
+          - generic [ref=f3e42]:
+            - text: Assignee
+            - combobox "Assignee" [ref=f3e43]:
+              - option "Unassigned"
+              - option "Admin"
+              - option "Manager" [selected]
+              - option "User"
+              - option "Viewer"
+          - generic [ref=f3e44]:
+            - text: Due
+            - textbox "Due" [ref=f3e45]
+        - generic [ref=f3e46]:
+          - button "Create ticket" [ref=f3e47]
+          - link "Cancel" [ref=f3e48] [cursor=pointer]:
+            - /url: /tickets

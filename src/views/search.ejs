@@ -1,0 +1,71 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main id="main-content" class="mx-auto w-full max-w-[1400px] flex-1 px-4 py-8 sm:px-6 lg:px-8">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h1 class="text-xl font-semibold tracking-tight">Search</h1>
+  </div>
+
+  <form method="get" action="/search" class="mt-6 flex flex-wrap items-end gap-3 rounded-lg border border-line bg-surface p-3">
+    <div class="min-w-[240px] flex-1">
+      <label for="q" class="block text-xs font-medium text-ink-soft">Query</label>
+      <input id="q" name="q" type="search" value="<%= q %>" placeholder="e.g. login timeout, TKT-000042"
+        class="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm" />
+    </div>
+    <button type="submit" class="rounded-md bg-ink px-3.5 py-1.5 text-sm font-medium text-white hover:bg-zinc-800">Search</button>
+  </form>
+
+  <p class="mt-2 text-xs text-ink-faint">
+    Searches ticket numbers, titles, descriptions and resolution notes. Only tickets you can read are returned.
+  </p>
+
+  <div class="mt-4 overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="w-full min-w-[720px] text-sm">
+      <thead>
+        <tr class="border-b border-line text-left text-xs uppercase tracking-wide text-ink-faint">
+          <th scope="col" class="px-4 py-2.5 font-medium">No.</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Title</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Status</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Priority</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Assignee</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!hasQuery) { %>
+          <tr>
+            <td colspan="6" class="px-4 py-12 text-center text-sm text-ink-faint">Enter a query to search.</td>
+          </tr>
+        <% } else if (rows.length === 0) { %>
+          <tr>
+            <td colspan="6" class="px-4 py-12 text-center text-sm text-ink-faint">No visible tickets match “<%= q %>”.</td>
+          </tr>
+        <% } %>
+        <% for (const r of rows) { %>
+          <tr class="border-b border-line-soft last:border-0 hover:bg-line-soft/60">
+            <td class="px-4 py-2.5 font-mono text-xs tabular-nums text-ink-faint"><%= r.ticketNo %></td>
+            <td class="px-4 py-2.5">
+              <a href="/tickets/<%= r.id %>" class="font-medium text-ink hover:text-accent hover:underline"><%= r.title %></a>
+            </td>
+            <td class="px-4 py-2.5">
+              <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium <%= r.statusClass %>"><%= r.status %></span>
+            </td>
+            <td class="px-4 py-2.5 text-ink-soft"><%= r.priority %></td>
+            <td class="px-4 py-2.5 text-ink-soft"><%= r.assignee_name || '—' %></td>
+            <td class="px-4 py-2.5 text-ink-faint"><%= new Date(r.updated_at).toISOString().replace('T', ' ').slice(0, 16) %> UTC</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if (totalPages > 1) { %>
+    <nav class="mt-4 flex items-center justify-between text-sm" aria-label="Pagination">
+      <span class="text-ink-faint">Page <%= page %> of <%= totalPages %> · <%= total %> results</span>
+      <div class="flex gap-2">
+        <% if (page > 1) { %><a class="rounded-md border border-line bg-surface px-3 py-1.5 text-ink-soft hover:bg-line-soft" href="/search?q=<%= encodeURIComponent(q) %>&page=<%= page - 1 %>">Previous</a><% } %>
+        <% if (page < totalPages) { %><a class="rounded-md border border-line bg-surface px-3 py-1.5 text-ink-soft hover:bg-line-soft" href="/search?q=<%= encodeURIComponent(q) %>&page=<%= page + 1 %>">Next</a><% } %>
+      </div>
+    </nav>
+  <% } %>
+</main>
+<%- include('partials/foot') %>

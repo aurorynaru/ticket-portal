@@ -1,0 +1,123 @@
+- generic [active] [ref=f13e1]:
+  - link "Skip to content" [ref=f13e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f13e3]:
+    - generic [ref=f13e4]: Ticketing
+    - navigation "Main" [ref=f13e6]:
+      - link "Home" [ref=f13e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f13e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f13e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f13e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f13e11]:
+      - generic [ref=f13e12]:
+        - paragraph [ref=f13e13]: Admin
+        - paragraph [ref=f13e14]: admin@example.com · admin
+      - button "Sign out" [ref=f13e16]
+  - main [ref=f13e18]:
+    - heading "Users" [level=1] [ref=f13e19]
+    - paragraph [ref=f13e20]: Provision and manage accounts. Public sign-up is disabled.
+    - generic [ref=f13e21]:
+      - heading "New user" [level=2] [ref=f13e22]
+      - generic [ref=f13e23]:
+        - generic [ref=f13e24]:
+          - generic [ref=f13e25]: Email
+          - textbox "Email" [ref=f13e26]
+        - generic [ref=f13e27]:
+          - generic [ref=f13e28]: Name
+          - textbox "Name" [ref=f13e29]
+        - generic [ref=f13e30]:
+          - generic [ref=f13e31]: Password
+          - textbox "Password" [ref=f13e32]
+        - generic [ref=f13e33]:
+          - generic [ref=f13e34]: Access level
+          - combobox "Access level" [ref=f13e35]:
+            - option "manager" [selected]
+            - option "user"
+            - option "viewer"
+        - button "Create user" [ref=f13e37]
+    - table [ref=f13e39]:
+      - rowgroup [ref=f13e40]:
+        - row [ref=f13e41]:
+          - columnheader "User" [ref=f13e42]
+          - columnheader "Role" [ref=f13e43]
+          - columnheader "Status" [ref=f13e44]
+          - columnheader "Actions" [ref=f13e45]
+      - rowgroup [ref=f13e46]:
+        - row [ref=f13e47]:
+          - cell "Admin admin@example.com" [ref=f13e48]:
+            - generic [ref=f13e49]: Admin
+            - generic [ref=f13e50]: admin@example.com
+          - cell "admin" [ref=f13e51]
+          - cell "active" [ref=f13e52]
+          - cell [ref=f13e53]:
+            - generic [ref=f13e54]:
+              - generic [ref=f13e55]:
+                - combobox [ref=f13e56]:
+                  - option "manager" [selected]
+                  - option "user"
+                  - option "viewer"
+                - button "Demote" [ref=f13e57]
+              - generic [ref=f13e58]:
+                - textbox "New password" [ref=f13e59]
+                - button "Reset" [ref=f13e60]
+        - row [ref=f13e61]:
+          - cell "Manager manager@example.com" [ref=f13e62]:
+            - generic [ref=f13e63]: Manager
+            - generic [ref=f13e64]: manager@example.com
+          - cell "manager" [ref=f13e65]
+          - cell "active" [ref=f13e66]
+          - cell [ref=f13e67]:
+            - generic [ref=f13e68]:
+              - button "Deactivate" [ref=f13e70]
+              - generic [ref=f13e71]:
+                - combobox [ref=f13e72]:
+                  - option "manager" [selected]
+                  - option "user"
+                  - option "viewer"
+                - button "Set" [ref=f13e73]
+              - button "Promote" [ref=f13e75]
+              - generic [ref=f13e76]:
+                - textbox "New password" [ref=f13e77]
+                - button "Reset" [ref=f13e78]
+        - row [ref=f13e79]:
+          - cell "User user@example.com" [ref=f13e80]:
+            - generic [ref=f13e81]: User
+            - generic [ref=f13e82]: user@example.com
+          - cell "user" [ref=f13e83]
+          - cell "active" [ref=f13e84]
+          - cell [ref=f13e85]:
+            - generic [ref=f13e86]:
+              - button "Deactivate" [ref=f13e88]
+              - generic [ref=f13e89]:
+                - combobox [ref=f13e90]:
+                  - option "manager"
+                  - option "user" [selected]
+                  - option "viewer"
+                - button "Set" [ref=f13e91]
+              - button "Promote" [ref=f13e93]
+              - generic [ref=f13e94]:
+                - textbox "New password" [ref=f13e95]
+                - button "Reset" [ref=f13e96]
+        - row [ref=f13e97]:
+          - cell "Viewer viewer@example.com" [ref=f13e98]:
+            - generic [ref=f13e99]: Viewer
+            - generic [ref=f13e100]: viewer@example.com
+          - cell "viewer" [ref=f13e101]
+          - cell "active" [ref=f13e102]
+          - cell [ref=f13e103]:
+            - generic [ref=f13e104]:
+              - button "Deactivate" [ref=f13e106]
+              - generic [ref=f13e107]:
+                - combobox [ref=f13e108]:
+                  - option "manager"
+                  - option "user"
+                  - option "viewer" [selected]
+                - button "Set" [ref=f13e109]
+              - button "Promote" [ref=f13e111]
+              - generic [ref=f13e112]:
+                - textbox "New password" [ref=f13e113]
+                - button "Reset" [ref=f13e114]

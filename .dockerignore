@@ -1,0 +1,28 @@
+# Do not include development/build output, local databases or secrets.
+.git
+.gitignore
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+.e2e/
+*.log
+npm-debug.log*
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+.local/
+data/
+uploads/
+backups/
+# Agent documentation and source design refs are not runtime dependencies.
+docs/
+AGENTS.md
+STATUS.md
+design/
+checks/

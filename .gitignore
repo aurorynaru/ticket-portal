@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+public/assets/app.css
+
+# Local data (never commit databases, uploads or secrets)
+.local/
+backups/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+.env
+.env.*
+!.env.example
+
+# Test/CI artifacts
+coverage/
+playwright-report/
+test-results/
+.e2e/
+*.log
+npm-debug.log*

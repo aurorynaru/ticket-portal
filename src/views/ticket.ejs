@@ -1,0 +1,272 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main id="main-content" class="mx-auto w-full max-w-[1400px] flex-1 px-4 py-8 sm:px-6 lg:px-8">
+  <div class="flex items-center gap-2 text-sm text-ink-faint">
+    <a href="/tickets" class="text-accent hover:underline">Tickets</a>
+    <span aria-hidden="true">/</span>
+    <span class="font-mono text-xs tabular-nums"><%= ticketNo %></span>
+  </div>
+
+  <div class="mt-3 flex flex-wrap items-center gap-3">
+    <h1 class="text-xl font-semibold tracking-tight"><%= ticket.title %></h1>
+    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium <%= statusClass(ticket.status) %>"><%= ticket.status %></span>
+  </div>
+
+  <% if (conflict) { %>
+    <div role="alert" class="mt-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+      <p>This ticket was changed by someone else since you opened the page. Review the latest state before acting.</p>
+      <a href="/tickets/<%= ticket.id %>" class="mt-1 inline-block font-medium underline">Reload latest state</a>
+    </div>
+  <% } %>
+  <% if (formError) { %>
+    <p role="alert" class="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"><%= formError %></p>
+  <% } %>
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-3">
+    <div class="space-y-6 lg:col-span-2">
+      <section class="rounded-lg border border-line bg-surface p-5" aria-labelledby="desc-h">
+        <h2 id="desc-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Description</h2>
+        <p class="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink"><%= ticket.description %></p>
+      </section>
+
+      <% if (resolutions.length > 0) { %>
+        <section class="rounded-lg border border-emerald-200 bg-emerald-50/50 p-5" aria-labelledby="res-h">
+          <h2 id="res-h" class="text-xs font-semibold uppercase tracking-wide text-emerald-800">Resolution</h2>
+          <dl class="mt-3 space-y-4 text-sm">
+            <% for (const r of resolutions) { %>
+              <div class="rounded-md border border-emerald-200 bg-surface p-4">
+                <p class="text-xs text-ink-faint">Resolved by <%= userNames[r.resolved_by] || '—' %> · <%= fmtTime(r.created_at) %></p>
+                <div class="mt-2 space-y-1.5">
+                  <p><span class="font-medium">Summary:</span> <%= r.issue_summary %></p>
+                  <p><span class="font-medium">Work performed:</span> <%= r.actions_taken %></p>
+                  <p><span class="font-medium">Resolution:</span> <%= r.resolution %></p>
+                  <% if (r.root_cause) { %><p><span class="font-medium">Root cause:</span> <%= r.root_cause %></p><% } %>
+                </div>
+              </div>
+            <% } %>
+          </dl>
+        </section>
+      <% } %>
+
+      <section class="rounded-lg border border-line bg-surface p-5" aria-labelledby="attachments-h">
+        <h2 id="attachments-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Attachments</h2>
+        <ul class="mt-3 space-y-2">
+          <% if (attachments.length === 0) { %>
+            <li class="text-sm text-ink-faint">No attachments.</li>
+          <% } %>
+          <% for (const a of attachments) { %>
+            <li class="flex flex-wrap items-center justify-between gap-2 rounded-md border border-line-soft bg-canvas p-3">
+              <span class="min-w-0 text-sm">
+                <a href="/attachments/<%= a.id %>/download" class="font-medium text-accent hover:underline"><%= a.original_name %></a>
+                <span class="ml-2 text-xs text-ink-faint"><%= Math.max(1, Math.round(a.byte_size / 1024)) %> KB · <%= userNames[a.uploaded_by] || 'Unknown' %> · <%= fmtTime(a.created_at) %></span>
+              </span>
+              <% if (a.canDelete) { %>
+                <form method="post" action="/attachments/<%= a.id %>/delete">
+                  <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                  <button type="submit" class="rounded-md border border-line px-2.5 py-1 text-xs text-ink-soft hover:bg-line-soft">Delete</button>
+                </form>
+              <% } %>
+            </li>
+          <% } %>
+        </ul>
+        <% if (canUpload) { %>
+          <form method="post" action="/tickets/<%= ticket.id %>/attachments" enctype="multipart/form-data" class="mt-4">
+            <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+            <label for="attachment-file" class="block text-sm font-medium">Upload file</label>
+            <input id="attachment-file" name="file" type="file" required
+              class="mt-1 block w-full text-sm text-ink-soft file:mr-3 file:rounded-md file:border-0 file:bg-ink file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-zinc-800" />
+            <p class="mt-1 text-xs text-ink-faint">PNG, JPEG, GIF, PDF or ZIP · max <%= Math.round(maxUploadBytes / 1024 / 1024) %> MB</p>
+            <div class="mt-3">
+              <button type="submit" class="rounded-md bg-ink px-3.5 py-2 text-sm font-medium text-white hover:bg-zinc-800">Upload</button>
+            </div>
+          </form>
+        <% } %>
+      </section>
+
+      <section class="rounded-lg border border-line bg-surface p-5" aria-labelledby="comments-h">
+        <h2 id="comments-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Comments</h2>
+        <ul class="mt-3 space-y-3">
+          <% if (comments.length === 0) { %>
+            <li class="text-sm text-ink-faint">No comments yet.</li>
+          <% } %>
+          <% for (const c of comments) { %>
+            <li class="rounded-md border border-line-soft bg-canvas p-3">
+              <p class="text-xs text-ink-faint">
+                <%= userNames[c.author_id] || 'Unknown' %> · <%= fmtTime(c.created_at) %>
+                <% if (c.is_internal) { %><span class="ml-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Internal note</span><% } %>
+              </p>
+              <p class="mt-1.5 whitespace-pre-wrap text-sm"><%= c.content %></p>
+            </li>
+          <% } %>
+        </ul>
+
+        <% if (canComment) { %>
+          <form method="post" action="/tickets/<%= ticket.id %>/comments" class="mt-4">
+            <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+            <label for="comment-body" class="block text-sm font-medium">Comment</label>
+            <textarea id="comment-body" name="content" rows="3" required placeholder="Add a comment…"
+              class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm placeholder:text-ink-faint focus:border-accent"></textarea>
+            <% if (canInternalNote) { %>
+              <label class="mt-2 flex items-center gap-2 text-sm text-ink-soft">
+                <input type="checkbox" name="internal" value="1" class="rounded border-line" />
+                Internal note
+              </label>
+            <% } %>
+            <div class="mt-3">
+              <button type="submit" class="rounded-md bg-ink px-3.5 py-2 text-sm font-medium text-white hover:bg-zinc-800">Comment</button>
+            </div>
+          </form>
+        <% } %>
+      </section>
+
+      <section class="rounded-lg border border-line bg-surface p-5" aria-labelledby="activity-h">
+        <h2 id="activity-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Activity</h2>
+        <ul class="mt-3 space-y-2">
+          <% for (const e of events) { %>
+            <li class="flex items-baseline gap-2 text-sm">
+              <span class="shrink-0 font-mono text-xs tabular-nums text-ink-faint"><%= fmtTime(e.created_at) %></span>
+              <span class="text-ink-soft"><%= userNames[e.actor_id] || 'System' %> — <%= e.event_type %></span>
+            </li>
+          <% } %>
+        </ul>
+      </section>
+    </div>
+
+    <aside class="space-y-4">
+      <section class="rounded-lg border border-line bg-surface p-4" aria-labelledby="meta-h">
+        <h2 id="meta-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Details</h2>
+        <dl class="mt-3 space-y-2 text-sm">
+          <div><dt class="text-xs text-ink-faint">Priority</dt><dd class="mt-0.5"><%= ticket.priority %></dd></div>
+          <div><dt class="text-xs text-ink-faint">Assignee</dt><dd class="mt-0.5">Assignee: <%= userNames[ticket.assigned_to] || 'Unassigned' %></dd></div>
+          <div><dt class="text-xs text-ink-faint">Created</dt><dd class="mt-0.5"><%= fmtTime(ticket.created_at) %></dd></div>
+          <div><dt class="text-xs text-ink-faint">Updated</dt><dd class="mt-0.5"><%= fmtTime(ticket.updated_at) %></dd></div>
+          <% if (ticket.due_at) { %><div><dt class="text-xs text-ink-faint">Due</dt><dd class="mt-0.5"><%= fmtTime(ticket.due_at) %></dd></div><% } %>
+        </dl>
+      </section>
+
+      <% if (show.assign) { %>
+        <section class="rounded-lg border border-line bg-surface p-4" aria-labelledby="assign-h">
+          <h2 id="assign-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Assignment</h2>
+          <div class="mt-3 rounded-md border border-line">
+            <button type="button" data-toggle-panel="assign-panel" aria-expanded="true"
+              class="w-full cursor-pointer px-3 py-1.5 text-left text-sm font-medium text-ink-soft hover:bg-line-soft">Assign</button>
+            <form id="assign-panel" method="post" action="/tickets/<%= ticket.id %>/assign" class="space-y-2 border-t border-line p-3">
+              <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+              <input type="hidden" name="version" value="<%= ticket.version %>" />
+              <label for="assign-select" class="block text-sm font-medium">Assignee</label>
+              <select id="assign-select" name="assigneeId" class="w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm">
+                <option value="">Unassigned</option>
+                <% for (const u of users) { %>
+                  <option value="<%= u.id %>" <%= ticket.assigned_to === u.id ? 'selected' : '' %>><%= u.name %></option>
+                <% } %>
+              </select>
+              <button type="submit" class="w-full rounded-md bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800">Save</button>
+            </form>
+          </div>
+        </section>
+      <% } %>
+
+      <section class="rounded-lg border border-line bg-surface p-4" aria-labelledby="actions-h">
+        <h2 id="actions-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">Work actions</h2>
+        <div class="mt-3 space-y-2">
+          <% if (show.start) { %>
+            <div class="rounded-md border border-line">
+              <button type="button" data-toggle-panel="start-panel" aria-expanded="true"
+                class="w-full cursor-pointer px-3 py-1.5 text-left text-sm font-medium text-ink-soft hover:bg-line-soft">Start work</button>
+              <form id="start-panel" method="post" action="/tickets/<%= ticket.id %>/start" class="border-t border-line p-3">
+                <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                <input type="hidden" name="version" value="<%= ticket.version %>" />
+                <p class="text-sm text-ink-soft">Move this ticket to in progress?</p>
+                <button type="submit" class="mt-2 w-full rounded-md bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800">Start</button>
+              </form>
+            </div>
+          <% } %>
+          <% if (show.block) { %>
+            <div class="rounded-md border border-line">
+              <button type="button" data-toggle-panel="block-panel" aria-expanded="true"
+                class="w-full cursor-pointer px-3 py-1.5 text-left text-sm font-medium text-ink-soft hover:bg-line-soft">Block</button>
+              <form id="block-panel" method="post" action="/tickets/<%= ticket.id %>/block" class="space-y-2 border-t border-line p-3">
+                <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                <input type="hidden" name="version" value="<%= ticket.version %>" />
+                <label for="block-reason" class="block text-sm font-medium">Reason *</label>
+                <textarea id="block-reason" name="reason" rows="2" required class="w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm"></textarea>
+                <button type="submit" class="w-full rounded-md bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800">Block</button>
+              </form>
+            </div>
+          <% } %>
+          <% if (show.unblock) { %>
+            <form method="post" action="/tickets/<%= ticket.id %>/unblock">
+              <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+              <input type="hidden" name="version" value="<%= ticket.version %>" />
+              <button type="submit" class="w-full rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-ink-soft hover:bg-line-soft">Unblock</button>
+            </form>
+          <% } %>
+          <% if (show.resolve) { %>
+            <div class="rounded-md border border-line">
+              <button type="button" data-toggle-panel="resolve-panel" aria-expanded="true"
+                class="w-full cursor-pointer px-3 py-1.5 text-left text-sm font-medium text-ink-soft hover:bg-line-soft">Resolve</button>
+              <form id="resolve-panel" method="post" action="/tickets/<%= ticket.id %>/resolve" class="space-y-2 border-t border-line p-3">
+                <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                <input type="hidden" name="version" value="<%= ticket.version %>" />
+                <div>
+                  <label for="issue-summary" class="block text-sm font-medium">Issue summary *</label>
+                  <input id="issue-summary" name="issueSummary" required class="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm" />
+                </div>
+                <div>
+                  <label for="work-performed" class="block text-sm font-medium">Work performed *</label>
+                  <textarea id="work-performed" name="actionsTaken" rows="2" required class="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm"></textarea>
+                </div>
+                <div>
+                  <label for="resolution" class="block text-sm font-medium">Resolution *</label>
+                  <textarea id="resolution" name="resolution" rows="2" required class="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm"></textarea>
+                </div>
+                <div>
+                  <label for="root-cause" class="block text-sm font-medium">Root cause (optional)</label>
+                  <textarea id="root-cause" name="rootCause" rows="2" class="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm"></textarea>
+                </div>
+                <button type="submit" class="w-full rounded-md bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800">Mark resolved</button>
+              </form>
+            </div>
+          <% } %>
+          <% if (show.close) { %>
+            <form method="post" action="/tickets/<%= ticket.id %>/close">
+              <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+              <input type="hidden" name="version" value="<%= ticket.version %>" />
+              <button type="submit" class="w-full rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-ink-soft hover:bg-line-soft">Close</button>
+            </form>
+          <% } %>
+          <% if (show.reopen) { %>
+            <div class="rounded-md border border-line">
+              <button type="button" data-toggle-panel="reopen-panel" aria-expanded="true"
+                class="w-full cursor-pointer px-3 py-1.5 text-left text-sm font-medium text-ink-soft hover:bg-line-soft">Reopen</button>
+              <form id="reopen-panel" method="post" action="/tickets/<%= ticket.id %>/reopen" class="space-y-2 border-t border-line p-3">
+                <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                <input type="hidden" name="version" value="<%= ticket.version %>" />
+                <div>
+                  <label for="reopen-reason" class="block text-sm font-medium">Reason *</label>
+                  <textarea id="reopen-reason" name="reason" rows="2" required class="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm"></textarea>
+                </div>
+                <button type="submit" class="w-full rounded-md bg-ink px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800">Reopen ticket</button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      </section>
+
+      <section class="rounded-lg border border-line bg-surface p-4" aria-labelledby="misc-h">
+        <h2 id="misc-h" class="text-xs font-semibold uppercase tracking-wide text-ink-soft">More</h2>
+        <div class="mt-3 space-y-2">
+          <% if (show.edit) { %>
+            <a href="/tickets/<%= ticket.id %>/edit" class="block w-full rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-ink-soft hover:bg-line-soft">Edit</a>
+          <% } %>
+          <form method="post" action="/tickets/<%= ticket.id %>/watch">
+            <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+            <% if (!isWatcher) { %><input type="hidden" name="watch" value="1" /><% } %>
+            <button type="submit" class="w-full rounded-md border border-line bg-surface px-3 py-1.5 text-sm text-ink-soft hover:bg-line-soft"><%= isWatcher ? 'Unwatch' : 'Watch' %></button>
+          </form>
+        </div>
+      </section>
+    </aside>
+  </div>
+</main>
+<%- include('partials/foot') %>

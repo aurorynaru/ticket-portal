@@ -1,0 +1,49 @@
+- generic [active] [ref=f16e1]:
+  - link "Skip to content" [ref=f16e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - complementary [ref=f16e3]:
+    - generic [ref=f16e4]: Ticketing
+    - navigation "Main" [ref=f16e6]:
+      - link "Home" [ref=f16e7] [cursor=pointer]:
+        - /url: /
+      - link "Tickets" [ref=f16e8] [cursor=pointer]:
+        - /url: /tickets
+      - link "Users" [ref=f16e9] [cursor=pointer]:
+        - /url: /admin/users
+      - link "Account" [ref=f16e10] [cursor=pointer]:
+        - /url: /account
+    - generic [ref=f16e11]:
+      - generic [ref=f16e12]:
+        - paragraph [ref=f16e13]: Admin
+        - paragraph [ref=f16e14]: admin@example.com · admin
+      - button "Sign out" [ref=f16e16]
+  - generic [ref=f16e17]:
+    - banner [ref=f16e18]:
+      - generic [ref=f16e19]: Ticketing
+      - button "Menu" [ref=f16e20]
+    - main [ref=f16e24]:
+      - generic [ref=f16e25]:
+        - generic [ref=f16e26]:
+          - heading "Welcome, Admin" [level=1] [ref=f16e27]
+          - paragraph [ref=f16e28]: "Signed in as admin@example.com · role: admin"
+        - link "New ticket" [ref=f16e29] [cursor=pointer]:
+          - /url: /tickets/new
+      - generic [ref=f16e30]:
+        - generic [ref=f16e31]:
+          - term [ref=f16e32]: Schema version
+          - definition [ref=f16e33]: "3"
+        - generic [ref=f16e34]:
+          - term [ref=f16e35]: Environment
+          - definition [ref=f16e36]: test
+      - generic [ref=f16e37]:
+        - heading "Getting started" [level=2] [ref=f16e38]
+        - list [ref=f16e39]:
+          - listitem [ref=f16e40]:
+            - link "Browse all tickets" [ref=f16e41] [cursor=pointer]:
+              - /url: /tickets
+          - listitem [ref=f16e42]:
+            - link "See tickets assigned to you" [ref=f16e43] [cursor=pointer]:
+              - /url: /tickets?scope=assigned
+          - listitem [ref=f16e44]:
+            - link "Create a new ticket" [ref=f16e45] [cursor=pointer]:
+              - /url: /tickets/new

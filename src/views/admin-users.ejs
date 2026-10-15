@@ -1,0 +1,118 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<main id="main-content" class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+  <h1 class="text-xl font-semibold tracking-tight">Users</h1>
+  <p class="mt-1 text-sm text-ink-soft">Provision and manage accounts. Public sign-up is disabled.</p>
+
+  <section class="mt-6 rounded-lg border border-line bg-surface p-5">
+    <h2 class="text-xs font-semibold uppercase tracking-wide text-ink-soft">New user</h2>
+    <form method="post" action="/admin/users" class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <label for="nu-email" class="block text-sm font-medium text-ink">Email</label>
+        <input id="nu-email" name="email" type="email" required
+               class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm focus:border-accent" />
+      </div>
+      <div>
+        <label for="nu-name" class="block text-sm font-medium text-ink">Name</label>
+        <input id="nu-name" name="name" type="text" required
+               class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm focus:border-accent" />
+      </div>
+      <div>
+        <label for="nu-password" class="block text-sm font-medium text-ink">Password</label>
+        <input id="nu-password" name="password" type="password" minlength="10" required
+               class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm focus:border-accent" />
+      </div>
+      <div>
+        <label for="nu-level" class="block text-sm font-medium text-ink">Access level</label>
+        <select id="nu-level" name="accessLevel"
+                class="mt-1 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm">
+          <% levels.forEach(function (level) { %>
+            <option value="<%= level %>"><%= level %></option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="sm:col-span-2">
+        <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+        <button type="submit" class="rounded-md bg-ink px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800">Create user</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="mt-6 overflow-x-auto rounded-lg border border-line bg-surface">
+    <table class="w-full min-w-[720px] text-left text-sm">
+      <thead class="border-b border-line text-xs uppercase tracking-wide text-ink-faint">
+        <tr>
+          <th scope="col" class="px-4 py-3 font-medium">User</th>
+          <th scope="col" class="px-4 py-3 font-medium">Role</th>
+          <th scope="col" class="px-4 py-3 font-medium">Status</th>
+          <th scope="col" class="px-4 py-3 text-right font-medium">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-line-soft">
+        <% users.forEach(function (u) {
+             const isAdmin = u.role === 'admin';
+             const active = u.is_active === 1;
+        %>
+          <tr>
+            <td class="px-4 py-3">
+              <div class="font-medium"><%= u.name || '(no name)' %></div>
+              <div class="text-ink-faint"><%= u.email %></div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="rounded-full px-2 py-0.5 text-xs font-medium <%= isAdmin ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-100 text-slate-700' %>">
+                <%= isAdmin ? 'admin' : (u.access_level || 'user') %>
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <span class="rounded-full px-2 py-0.5 text-xs font-medium <%= active ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700' %>">
+                <%= active ? 'active' : 'inactive' %>
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex flex-wrap items-center justify-end gap-2">
+                <% if (!isAdmin) { %>
+                  <form method="post" action="/admin/users/<%= u.id %>/<%= active ? 'deactivate' : 'activate' %>">
+                    <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                    <button type="submit" class="rounded-md border border-line px-2.5 py-1 text-xs text-ink-soft hover:bg-line-soft">
+                      <%= active ? 'Deactivate' : 'Activate' %>
+                    </button>
+                  </form>
+                  <form method="post" action="/admin/users/<%= u.id %>/level" class="flex items-center gap-1">
+                    <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                    <select name="level" class="rounded-md border border-line px-2 py-1 text-xs">
+                      <% levels.forEach(function (level) { %>
+                        <option value="<%= level %>" <%= level === u.access_level ? 'selected' : '' %>><%= level %></option>
+                      <% }); %>
+                    </select>
+                    <button type="submit" class="rounded-md border border-line px-2.5 py-1 text-xs text-ink-soft hover:bg-line-soft">Set</button>
+                  </form>
+                  <form method="post" action="/admin/users/<%= u.id %>/promote">
+                    <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                    <button type="submit" class="rounded-md border border-line px-2.5 py-1 text-xs text-ink-soft hover:bg-line-soft">Promote</button>
+                  </form>
+                <% } else { %>
+                  <form method="post" action="/admin/users/<%= u.id %>/demote" class="flex items-center gap-1">
+                    <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                    <select name="level" class="rounded-md border border-line px-2 py-1 text-xs">
+                      <% levels.forEach(function (level) { %>
+                        <option value="<%= level %>"><%= level %></option>
+                      <% }); %>
+                    </select>
+                    <button type="submit" class="rounded-md border border-line px-2.5 py-1 text-xs text-ink-soft hover:bg-line-soft">Demote</button>
+                  </form>
+                <% } %>
+                <form method="post" action="/admin/users/<%= u.id %>/password" class="flex items-center gap-1">
+                  <input type="hidden" name="csrfToken" value="<%= csrfToken %>" />
+                  <input type="password" name="newPassword" minlength="10" placeholder="New password"
+                         class="rounded-md border border-line px-2 py-1 text-xs" />
+                  <button type="submit" class="rounded-md border border-line px-2.5 py-1 text-xs text-ink-soft hover:bg-line-soft">Reset</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </section>
+</main>
+<%- include('partials/foot') %>
