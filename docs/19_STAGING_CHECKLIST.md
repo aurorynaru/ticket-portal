@@ -69,11 +69,39 @@ Companion docs: `docs/11_RAILWAY_DEPLOY.md` (config), `docs/17_DOCKER_IMPLEMENTA
 ## 3. Identity + core flows (P6.1)
 
 - [ ] Public sign-up is disabled (no self-service account creation).
-- [ ] First admin created with the reviewed Better Auth bootstrap tooling
-      (`npm run auth:create-admin`), not by hand-editing the DB.
+- [ ] First admin created with the reviewed one-time bootstrap CLI
+      (`node dist/auth/cli-bootstrap-admin.js` in the Railway shell — see
+      "First admin bootstrap" below), not by hand-editing the DB.
 - [ ] Sign-in sets the session cookie over HTTPS; sign-out clears it.
 - [ ] Verified end-to-end in a browser: create ticket → attach file → assign →
       resolve → close. Reopen works.
+
+### First admin bootstrap (exact Railway procedure)
+
+Run from the **Railway service shell** (the volume is mounted there; the CLI
+resolves `DATABASE_PATH=/data/tickets.db` from the service environment, and
+`loadConfig()` refuses to run in production unless the path is under `/data`):
+
+```bash
+# 1) Read the password into the environment without echoing it into shell history:
+read -s BOOTSTRAP_ADMIN_PASSWORD
+export BOOTSTRAP_ADMIN_PASSWORD
+export BOOTSTRAP_ADMIN_EMAIL="you@example.com"
+export BOOTSTRAP_ADMIN_NAME="Your Name"   # optional, defaults to "Administrator"
+
+# 2) Run the one-time bootstrap (compiled into the image at dist/):
+node dist/auth/cli-bootstrap-admin.js
+```
+
+Expected output: `Target database: /data/tickets.db (NODE_ENV=production)` then
+`First admin created successfully.` with the email/role/access level (the
+password is never printed). The account gets Better Auth role `admin` and
+application accessLevel `manager`.
+
+Properties: one-time (refuses if the email already exists — it never resets
+passwords or elevates roles); the user, credential account, and profile are
+written in a single transaction; safe to run while the app is serving (WAL +
+busy timeout). Interactive TTY mode (no env vars) is also supported.
 
 ## 4. Persistence across redeploy (P6.2)
 

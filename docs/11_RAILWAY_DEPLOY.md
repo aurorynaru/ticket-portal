@@ -62,7 +62,7 @@ Railway docs note volumes are root-mounted and non-root container images can fac
 - [ ] Production secrets configured and no `.env` checked into Git.
 - [ ] Public hostname/HTTPS configured and Better Auth sign-in cookie tested.
 - [ ] `/health/live` and `/health/ready` checked externally.
-- [ ] Admin created using supported Better Auth bootstrap method.
+- [ ] First admin created with the one-time bootstrap CLI (`node dist/auth/cli-bootstrap-admin.js` in the Railway shell; see `docs/19_STAGING_CHECKLIST.md` "First admin bootstrap").
 - [ ] Login, create ticket, attach file, resolve, close tested.
 - [ ] Redeploy, verify exact ticket, file and auth session persisted.
 - [ ] Daily + weekly Railway volume backups enabled where appropriate.

@@ -28,6 +28,7 @@
     "load:burst": "k6 run --env TARGET=http://127.0.0.1:3199 load/k6/burst.js",
     "auth:migrate": "auth migrate --config src/auth/cli-config.ts",
     "auth:create-admin": "auth create-admin --config src/auth/cli-config.ts",
+    "admin:bootstrap": "tsx src/auth/cli-bootstrap-admin.ts",
     "seed:e2e": "tsx scripts/seed-e2e.ts"
   },
   "dependencies": {
